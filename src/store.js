@@ -1,5 +1,6 @@
-import {createStore} from 'redux'; //almacén de datos
-
+import { createStore } from "redux" //para crear mi almacen de datos
+//almacenada la data de la app y este este lo proveemos en nuestro app.js, así los componentes dentro del provider pueden leer
+//lo del store
 const initialState = {
     jugadores: [{
             id: 1,
@@ -19,7 +20,7 @@ const initialState = {
         {
             id: 4,
             nombre: "Felipe Ramirez",
-            foto: "https://media.licdn.com/dms/image/C4E03AQGUl5U-zW8YoA/profile-displayphoto-shrink_200_200/0?e=1583971200&v=beta&t=60OpJJ3uVnlWP1oLl9s-Il_AaclMkaOWwCOXiNwP7sE"
+            foto: "https://media-exp1.licdn.com/dms/image/C4E03AQF8Tz26oKx1LQ/profile-displayphoto-shrink_100_100/0?e=2159024400&v=beta&t=8Jj6JAvnn-tldwKA5tonhoxTS1mg8RCBqS44du3VDP4"
         },
         {
             id: 5,
@@ -39,7 +40,7 @@ const initialState = {
         {
             id: 8,
             nombre: "Manuel Rodriguez",
-            foto: "https://drupal.ed.team/sites/default/files/styles/perfil_en_views_200x200_/public/2018-08/manu-foto.jpg?itok=4HvdRLS7ceived_1693673130717610.jpeg?itok=ey6dQlly"
+            foto: "https://ichef.bbci.co.uk/news/976/cpsprodpb/9653/production/_105438483_c025224c-17fd-4c44-ac7d-eb0dc995f1d2.png"
         },
         {
             id: 9,
@@ -66,4 +67,41 @@ const initialState = {
     suplentes: []
 }
 
+const reducerEntrenador = (state = initialState, action) => {
 
+    if(action.type === "AGREGAR_TITULAR") {
+        return {
+            ...state, //mi state con todas las propiedades como se encuentra inicialmente
+            titulares: state.titulares.concat(action.jugador),
+            jugadores: state.jugadores.filter(j => j.id !== action.jugador.id)
+        }
+    }
+
+    if(action.type === "AGREGAR_SUPLENTE") {
+        return {
+            ...state,
+            suplentes: state.suplentes.concat(action.jugador),
+            jugadores: state.jugadores.filter(j => j.id !== action.jugador.id)
+        }
+    }
+
+    if(action.type === "QUITAR_TITULAR") {
+        return {
+            ...state,
+            titulares: state.titulares.filter(j => j.id !== action.jugador.id),
+            jugadores: state.jugadores.concat(action.jugador)
+        }
+    }
+
+    if(action.type === "QUITAR_SUPLENTE") {
+        return {
+            ...state,
+            suplentes: state.suplentes.filter(j => j.id !== action.jugador.id),
+            jugadores: state.jugadores.concat(action.jugador)
+        }
+    }
+
+    return state
+}
+
+export default createStore(reducerEntrenador)
